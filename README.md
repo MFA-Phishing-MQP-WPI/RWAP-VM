@@ -25,3 +25,6 @@ sudo ./install-driver.sh
 
 sudo wifite --kill
 ```
+
+## known errors
+Port `8080` may already be used, in which case the alternative port should be used. Go to the alternative port folder and use those files instead. They use port `8021`.
