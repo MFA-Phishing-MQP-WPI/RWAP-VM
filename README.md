@@ -20,6 +20,8 @@ cd 8821au-20210708
 sudo ./install-driver.sh
 > n
 > y
+
 << SYSTEM RESTARTS BY ITSELF >>
+
 sudo wifite --kill
 ```
