@@ -1,13 +1,14 @@
-echo "[ ] configuring terminals, hostapd dnsmasq"
+echo "[ ] setting up your system ..."
 apt install gnome-terminal
 sudo apt install -y hostapd
 sudo apt install -y dnsmasq
+echo "[*] configuring terminals, hostapd dnsmasq"
 
-echo "[ ] configuring net tools systems"
 sudo apt install -y aircrack-ng iptables-persistent net-tools
+echo "[*] configuring net tools systems successfully"
 
-echo "[ ] installing mitmproxy"
 pip install mitmproxy --break-system-packages
+echo "[*] installing mitmproxy successfully"
 
-echo "[ ] updating security settings"
 chmod +x fakeap.sh
+echo "[*] updated security settings successfully"
