@@ -4,6 +4,9 @@
 ## configure req
 ```bash
 apt install gnome-terminal
+sudo apt install -y hostapd
+sudo apt install -y dnsmasq
+sudo apt install -y aircrack-ng iptables-persistent net-tools
 pip install mitmproxy --break-system-packages
 ```
 
